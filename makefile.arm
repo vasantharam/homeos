@@ -1,0 +1,18 @@
+include makefile.inc
+
+all : bootblk
+bootblk : cmain
+	cat cmain  > bootblk
+	
+example/cmain.so : example/cmain.c example/cmain.h 
+	make -C example
+arch/arm/arm.so: arch/arm/*.c arch/arm/*.asm arch/arm/internal-include/*.h arch/arm/interface-include/*.h
+	make -C arch/arm all
+kernel/kernel.so : kernel/*.c  kernel/include/*.h
+	make -C kernel all
+cmain : example/cmain.so arch/arm/arm.so kernel/kernel.so
+	arm-linux-ld -o .cmain -Ttext 0x0 -T linker_script.arm example/*.o kernel/*.o arch/arm/*.o; arm-linux-objcopy -O binary -S .cmain cmain; arm-linux-objdump -D .cmain > .cmain_disassembly; arm-linux-objdump -b binary -m arm -D cmain > cmain_disassembly
+.PHONY : clean
+clean : 
+	rm -Rf *.o cmain bootblk; make -C arch/arm clean; make -C kernel clean
+

@@ -1,0 +1,18 @@
+User mode tasks:
+=================
+1. stub startup function, which is a call-gate jumper to
+  user-mode entry point.
+    (with paging, the entry point becomes standard, so gives
+    a chiken egg situation).
+
+    So as a trasit arrangement, let there be a copy of a stub-function
+    per new task. 
+
+2. Each new task creation, creates a call-gate for jump to entry point,
+however after introduction of paging there can be just one.
+
+3. The prototype of archCreateTask should change to take
+a handle from memory manager representing the memory context of the
+new task. (common entry point)
+
+4. For now let kernel mode use 1x1 paging

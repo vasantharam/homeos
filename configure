@@ -1,0 +1,17 @@
+#!/bin/bash
+if [ "t$1" == "t" ]
+then
+    echo "usage: configure <x86 | arm>"
+    exit 
+fi
+if [ $1 == "x86" ]
+then
+    cp makefile.x86 makefile
+    cp makefile.inc.x86 makefile.inc
+fi
+
+if [ $1 == "arm" ]
+then
+    cp makefile.arm makefile
+    cp makefile.inc.arm makefile.inc
+fi
